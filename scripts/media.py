@@ -196,7 +196,14 @@ def movie_status(r: Arr, movie_id: int):
     return st
 
 
-def movie_add(tmdb_id: int, profile: str | None, root: str | None):
+def movie_add(tmdb_id: int, profile: str | None, root: str | None, dub: str | None = None):
+    if dub:
+        # dubbed request: profile + root both follow the requested language, never half of it
+        iso = dub.upper()
+        profile = profile or os.environ.get(f"RADARR_PROFILE_DUB_{iso}") or f"HD-1080p {iso}A" if iso == "IT" else profile
+        root = root or os.environ.get(f"RADARR_ROOT_{iso}")
+        if not root:
+            fail(1, f"no root folder configured for dubbed '{dub}' (set RADARR_ROOT_{iso})")
     r = Arr("radarr")
     res = r._req(f"/movie/lookup?term=tmdb:{tmdb_id}")
     if not res:
@@ -445,6 +452,7 @@ def main():
     ad.add_argument("--profile", help="quality profile name")
     ad.add_argument("--root", help="root folder path")
     ad.add_argument("--anime", action="store_true", help="force anime type/root")
+    ad.add_argument("--dub", help="movie only: dubbed language ISO code, e.g. it -> profile HD-1080p ITA + RADARR_ROOT_IT")
 
     st = sub.add_parser("status", help="library + download status of one item")
     st.add_argument("kind", choices=["movie", "series"])
@@ -469,7 +477,7 @@ def main():
             (movie_lookup if ARGS.kind == "movie" else series_lookup)(ARGS.term, ARGS.limit)
         elif ARGS.cmd == "add":
             if ARGS.kind == "movie":
-                movie_add(ARGS.id, ARGS.profile, ARGS.root)
+                movie_add(ARGS.id, ARGS.profile, ARGS.root, ARGS.dub)
             else:
                 series_add(ARGS.id, ARGS.seasons or "", ARGS.profile, ARGS.root, True if ARGS.anime else None)
         elif ARGS.cmd == "status":

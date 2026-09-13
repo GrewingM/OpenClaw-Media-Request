@@ -62,7 +62,7 @@ Run it as: `python3 {{skill_dir}}/scripts/media.py …`
    |---|---|
    | "in 4K", "UHD" | `--profile Ultra-HD` |
    | "any quality", "anche in bassa qualit" | `--profile Any` |
-   | "doppiato in italiano" (a non-Italian film, dubbed  rare) | `--profile "HD-1080p ITA" --root /shield/MOVIES_ITA` (profile must exist) |
+   | "doppiato in italiano" (a non-Italian film, dubbed  rare) | `--dub it`  profile `HD-1080p ITA` (must exist in Radarr, Language = Italian) + root `RADARR_ROOT_IT` |
    | "in italiano" (series) | `--profile "HD-1080p ITA"`; anime  add `--root /shield/ANIME_ITA` |
 
    If the requested profile does not exist the script says so (exit 1)  report it, don't fall back silently.
