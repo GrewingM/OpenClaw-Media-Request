@@ -52,6 +52,7 @@ Run it as: `python3 {{skill_dir}}/scripts/media.py …`
    the search has started, and that it will appear in Plex when the download completes
    (Radarr/Sonarr refresh the Plex library on import).
 7. If exit code is 2, say the media server is unreachable and stop; don't retry in a loop.
+   **One reply per request.** Send a single message with the outcome; no follow-ups, no corrections of your own message, no internal notes. In `queue` output an item titled with a bare hash is a torrent whose metadata has not arrived yet  report it as "starting", don't speculate.
 8. **Quality and language are defaults, not questions.** Quality defaults to the configured
    profile (HD-1080p); language defaults to the original audio (set the Radarr profile Language to *Original*). Films are filed by original language: `RADARR_ROOT_IT` for Italian, `RADARR_ROOT` otherwise. Never ask for them up front.
    Instead, state both in the confirmation line so the user can veto in one word, e.g.
@@ -60,8 +61,8 @@ Run it as: `python3 {{skill_dir}}/scripts/media.py …`
 
    | User says | Pass |
    |---|---|
-   | "in 4K", "UHD" | `--profile Ultra-HD` |
-   | "any quality", "anche in bassa qualit" | `--profile Any` |
+   | "in 4K", "UHD" | nothing  the default profile already targets 2160p with 1080p fallback; only pass `--profile` if the user names a *different* profile |
+   | "in 1080p", "any quality" | `--profile HD-1080p` / `--profile Any` |
    | "doppiato in italiano" (a non-Italian film, dubbed  rare) | `--dub it`  profile `HD-1080p ITA` (must exist in Radarr, Language = Italian) + root `RADARR_ROOT_IT` |
    | "in italiano" (series) | `--profile "HD-1080p ITA"`; anime  add `--root /shield/ANIME_ITA` |
 

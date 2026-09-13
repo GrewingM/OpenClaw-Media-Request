@@ -23,7 +23,7 @@ with one word.
 |---|---|
 | "get me Dune" | `lookup movie "dune"`  shows *Dune (2021)* and *Dune (1984)*  asks which |
 | "get me Dune 2021" | `lookup`  single match  confirms "Dune (2021), 2160p, original audio"  `add movie 438631` |
-| "in 4K" / "UHD" | `--profile Ultra-HD` (or whatever your 4K profile is called) |
+| "in 4K" / "UHD" | nothing extra  the configured default profile already targets 2160p (1080p fallback) |
 | "in 1080p", "any quality" | `--profile HD-1080p` / `--profile Any` |
 | "in Italian", "doppiato" (for a film that is *not* Italian) | `--dub it`  profile `HD-1080p ITA` + root `RADARR_ROOT_IT` (both must exist, otherwise a clear refusal) |
 | an Italian/Spanish/ film with no language stated | original audio, filed under `RADARR_ROOT_<ISO>` if set (e.g. `MOVIES_ITA`) |
