@@ -169,6 +169,7 @@ def movie_lookup(term: str, limit: int):
             "year": m.get("year"),
             "originalTitle": m.get("originalTitle"),
             "overview": (m.get("overview") or "")[:200],
+            "originalLanguage": (m.get("originalLanguage") or {}).get("name"),
             "inLibrary": bool(m.get("id")),
             "hasFile": bool(m.get("hasFile")),
             "radarrId": m.get("id") or None,
@@ -209,7 +210,11 @@ def movie_add(tmdb_id: int, profile: str | None, root: str | None):
         return
     pid, pname = r.profile_id(profile)
     roots = r.root_folders()
-    root = root or os.environ.get("RADARR_ROOT") or (roots[0] if roots else None)
+    if not root:
+        # root by original language: RADARR_ROOT_<ISO> (e.g. RADARR_ROOT_IT) wins, else RADARR_ROOT, else first
+        lang = ((m.get("originalLanguage") or {}).get("name") or "").lower()
+        iso = {"italian": "IT", "english": "EN", "spanish": "ES", "german": "DE", "french": "FR", "japanese": "JA"}.get(lang)
+        root = (os.environ.get(f"RADARR_ROOT_{iso}") if iso else None) or os.environ.get("RADARR_ROOT") or (roots[0] if roots else None)
     if not root or root not in roots:
         fail(1, f"root folder '{root}' unknown; available: {roots}")
     body = {**m, "qualityProfileId": pid, "rootFolderPath": root, "monitored": True,

@@ -53,7 +53,7 @@ Run it as: `python3 {{skill_dir}}/scripts/media.py …`
    (Radarr/Sonarr refresh the Plex library on import).
 7. If exit code is 2, say the media server is unreachable and stop; don't retry in a loop.
 8. **Quality and language are defaults, not questions.** Quality defaults to the configured
-   profile (HD-1080p); language defaults to the original audio. Never ask for them up front.
+   profile (HD-1080p); language defaults to the original audio (set the Radarr profile Language to *Original*). Films are filed by original language: `RADARR_ROOT_IT` for Italian, `RADARR_ROOT` otherwise. Never ask for them up front.
    Instead, state both in the confirmation line so the user can veto in one word, e.g.
    "Aggiungo *The Fall Guy* (2024)  1080p, audio originale. Dimmi 'in italiano' o '4K' se vuoi altro."
    Then map the reply:
@@ -62,7 +62,7 @@ Run it as: `python3 {{skill_dir}}/scripts/media.py …`
    |---|---|
    | "in 4K", "UHD" | `--profile Ultra-HD` |
    | "any quality", "anche in bassa qualit" | `--profile Any` |
-   | "in italiano", "doppiato", "ITA" (film) | `--profile "HD-1080p ITA" --root /shield/MOVIES_ITA` |
+   | "doppiato in italiano" (a non-Italian film, dubbed  rare) | `--profile "HD-1080p ITA" --root /shield/MOVIES_ITA` (profile must exist) |
    | "in italiano" (series) | `--profile "HD-1080p ITA"`; anime  add `--root /shield/ANIME_ITA` |
 
    If the requested profile does not exist the script says so (exit 1)  report it, don't fall back silently.
