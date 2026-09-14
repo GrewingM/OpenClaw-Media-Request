@@ -470,7 +470,10 @@ def main():
     rm.add_argument("id", type=int, help="radarrId / sonarrId (from lookup/status), NOT tmdb/tvdb")
     rm.add_argument("--delete-files", action="store_true")
 
-    ARGS = p.parse_args()
+    # accept --text anywhere on the line (e.g. "queue --text"), not only before the subcommand
+    _argv = [a for a in sys.argv[1:] if a != "--text"]
+    ARGS = p.parse_args(_argv)
+    ARGS.text = ARGS.text or "--text" in sys.argv
     k = {"movie": "radarr", "series": "sonarr"}
     try:
         if ARGS.cmd == "lookup":
