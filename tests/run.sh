@@ -3,7 +3,8 @@
 cd "$(dirname "$0")/.." || exit 1
 python3 tests/mock_arr.py & MOCK=$!; sleep 1
 export RADARR_URL=http://127.0.0.1:17878 SONARR_URL=http://127.0.0.1:18989
-export RADARR_API_KEY=$(printf 'k%.0s' $(seq 32)) SONARR_API_KEY=$RADARR_API_KEY
+export RADARR_API_KEY=$(printf 'k%.0s' $(seq 32))
+export SONARR_API_KEY=$RADARR_API_KEY
 export RADARR_QUALITY_PROFILE=HD-1080p SONARR_QUALITY_PROFILE=HD-1080p
 M="python3 scripts/media.py --text"
 set -x
